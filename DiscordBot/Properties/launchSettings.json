@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DiscordBot": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "Token": "Nzg3MzExOTU0OTEzMDAxNDgy.X9THZQ.-3DNZZnBDXEUc1g-YWoYM-6-rJk"
+      }
+    }
+  }
+}
