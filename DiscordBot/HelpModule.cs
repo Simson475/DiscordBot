@@ -17,7 +17,6 @@ namespace DiscordBot
             CommandService _commands = new CommandService();
             await _commands.AddModulesAsync(assembly: Assembly.GetEntryAssembly(),
                                             services: null);
-
             List<CommandInfo> commands = _commands.Commands.ToList();
             EmbedBuilder embedBuilder = new EmbedBuilder();
 

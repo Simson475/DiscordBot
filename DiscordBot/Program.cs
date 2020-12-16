@@ -3,6 +3,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace DiscordBot
@@ -13,24 +14,19 @@ namespace DiscordBot
 
         private DiscordSocketClient _client;
         private CommandService _commands;
-        private IServiceProvider _services;
         private CommandHandler _commandHandler;
 
         public async Task MainAsync()
         {
             _client = new DiscordSocketClient();
             _commands = new CommandService();
-            _services = new ServiceCollection()
-                            .AddSingleton(_client)
-                            .AddSingleton(_commands)
-                            .BuildServiceProvider();
 
             _client.Log += Log;
 
             _commandHandler = new CommandHandler(_client, _commands);
 
             //discord token
-            var token = Environment.GetEnvironmentVariable("Token");
+            string token = File.ReadAllText("./env.txt"); //Environment.GetEnvironmentVariable("Token");
 
             await _commandHandler.InstallCommandsAsync();
             await _client.LoginAsync(TokenType.Bot, token);
