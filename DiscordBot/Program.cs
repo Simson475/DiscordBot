@@ -22,7 +22,6 @@ namespace DiscordBot
             _commands = new CommandService();
 
             _client.Log += Log;
-
             _commandHandler = new CommandHandler(_client, _commands);
 
             //discord token
