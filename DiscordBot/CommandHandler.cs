@@ -11,7 +11,7 @@ namespace DiscordBot
     {
         private readonly DiscordSocketClient _client;
         private readonly CommandService _commands;
-        private IServiceProvider _services;
+        private readonly IServiceProvider _services;
 
         // Retrieve client and CommandService instance via ctor
         public CommandHandler(DiscordSocketClient client, CommandService commands)
