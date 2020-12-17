@@ -13,16 +13,31 @@ namespace DiscordBot
         public int TotalShots { get; set; }
         public bool IsGameActive { get; set; } = false;
         [Command("Start")]
-        [Summary("Starts a game of russian roulette game")]
-        public async Task StartCommand()
+        [Summary("Starts a game of russian roulette game. should be followed by a number for armed shots and one fore total shots")]
+        public async Task StartCommand([Remainder] string input)
         {
             if (IsGameActive)
             {
                 await ReplyAsync($"Roulette already started!");
                 return;
             }
-            ArmedShots = 1;
-            TotalShots = 6;
+            string[] numbers = input.Split(" ");
+
+
+            if (!int.TryParse(numbers[0], out int tempArmed))
+            {
+                await ReplyAsync($"invalid parameter for armed shots");
+                return;
+            }
+
+            if (!int.TryParse(numbers[0], out int tempTotal))
+            {
+                await ReplyAsync($"invalid parameter for total shots");
+                return;
+            }
+
+            ArmedShots = tempArmed;
+            TotalShots = tempTotal;
             await ReplyAsync($"Roulette just started");
         }
 
