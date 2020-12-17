@@ -26,7 +26,8 @@ namespace DiscordBot
             _commandHandler = new CommandHandler(_client, _commands);
 
             //discord token
-            string token = File.ReadAllText("./env.txt"); //Environment.GetEnvironmentVariable("Token");
+            string token = Environment.GetEnvironmentVariable("Token");
+            //string token = File.ReadAllText("./env.txt");
 
             await _commandHandler.InstallCommandsAsync();
             await _client.LoginAsync(TokenType.Bot, token);
