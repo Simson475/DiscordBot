@@ -23,6 +23,11 @@ namespace DiscordBot
             foreach (CommandInfo command in commands)
             {
                 // Get the command Summary attribute information
+                string test = command.Module.Group;
+                if (test != "")
+                {
+
+                }
                 string embedFieldText = command.Summary ?? "No description available\n";
                 embedBuilder.AddField(command.Name, embedFieldText);
             }
