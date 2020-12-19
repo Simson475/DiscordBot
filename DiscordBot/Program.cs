@@ -8,38 +8,41 @@ using System.Threading.Tasks;
 
 namespace DiscordBot
 {
+
     public class Program
     {
-        public static void Main() => new Program().MainAsync().GetAwaiter().GetResult();
+        public static async Task Main(string[] args) => await Startup.RunAsync(args);
+        //public static void Main() => new Program().MainAsync().GetAwaiter().GetResult();
 
-        private DiscordSocketClient _client;
-        private CommandService _commands;
-        private CommandHandler _commandHandler;
+        //    private DiscordSocketClient _client;
+        //    private CommandService _commands;
+        //    private CommandHandler _commandHandler;
 
-        public async Task MainAsync()
-        {
-            _client = new DiscordSocketClient();
-            _commands = new CommandService();
+        //    public async Task MainAsync()
+        //    {
 
-            _client.Log += Log;
-            _commandHandler = new CommandHandler(_client, _commands);
+        //        _client = new DiscordSocketClient();
+        //        _commands = new CommandService();
 
-            //discord token
-            string token = Environment.GetEnvironmentVariable("Token");
-            //string token = File.ReadAllText("./env.txt");
+        //        _client.Log += Log;
+        //        _commandHandler = new CommandHandler(_client, _commands);
 
-            await _commandHandler.InstallCommandsAsync();
-            await _client.LoginAsync(TokenType.Bot, token);
-            await _client.StartAsync();
+        //        //discord token
+        //        string token = Environment.GetEnvironmentVariable("Token");
+        //        //string token = File.ReadAllText("./env.txt");
 
-            // Block this task until the program is closed.
-            await Task.Delay(-1);
-        }
+        //        await _commandHandler.InstallCommandsAsync();
+        //        await _client.LoginAsync(TokenType.Bot, token);
+        //        await _client.StartAsync();
 
-        private Task Log(LogMessage msg)
-        {
-            Console.WriteLine(msg.ToString());
-            return Task.CompletedTask;
-        }
+        //        // Block this task until the program is closed.
+        //        await Task.Delay(-1);
+        //    }
+
+        //    private Task Log(LogMessage msg)
+        //    {
+        //        Console.WriteLine(msg.ToString());
+        //        return Task.CompletedTask;
+        //    }
     }
 }
