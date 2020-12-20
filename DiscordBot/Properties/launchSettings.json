@@ -3,6 +3,7 @@
     "DiscordBot": {
       "commandName": "Project",
       "environmentVariables": {
+        "password": "vBmtK5Wtr86pzCAN",
         "prefix": "*",
         "Token": "Nzg3MzExOTU0OTEzMDAxNDgy.X9THZQ.-3DNZZnBDXEUc1g-YWoYM-6-rJk"
       }
