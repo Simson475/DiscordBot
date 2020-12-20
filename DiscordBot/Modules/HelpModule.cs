@@ -1,6 +1,8 @@
 ﻿using Discord;
 using Discord.Commands;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -35,4 +37,18 @@ namespace DiscordBot
             await ReplyAsync("Here's a list of commands and their description: ", false, embedBuilder.Build());
         }
     }
+
+    public class MathModule : ModuleBase<SocketCommandContext>
+    {
+        [Command("Math")]
+        [Summary("Computes the given math expression")]
+        public async Task MathCommand([Remainder] string math)
+        {
+            math = math.Replace("`", "");
+            DataTable dataTable = new DataTable();
+            var result = dataTable.Compute(math, null);
+            await ReplyAsync($"Result is {result}");
+        }
+    }
+
 }
