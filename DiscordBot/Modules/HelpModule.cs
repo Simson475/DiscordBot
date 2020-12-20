@@ -2,7 +2,6 @@
 using Discord.Commands;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -11,7 +10,6 @@ namespace DiscordBot
 {
     public class HelpModule : ModuleBase<SocketCommandContext>
     {
-
         [Command("Help")]
         [Summary("Provides a list of commands for the bot")]
         public async Task HelpCommand()
@@ -25,29 +23,13 @@ namespace DiscordBot
             foreach (CommandInfo command in commands)
             {
                 // Get the command Summary attribute information
-                string test = command.Module.Group;
-                if (test != "")
-                {
+                string group = command.Module.Group + " ";
 
-                }
                 string embedFieldText = command.Summary ?? "No description available\n";
-                embedBuilder.AddField(command.Name, embedFieldText);
+                embedBuilder.AddField($"{group} {command.Name}", embedFieldText);
             }
 
             await ReplyAsync("Here's a list of commands and their description: ", false, embedBuilder.Build());
-        }
-    }
-
-    public class MathModule : ModuleBase<SocketCommandContext>
-    {
-        [Command("Math")]
-        [Summary("Computes the given math expression")]
-        public async Task MathCommand([Remainder] string math)
-        {
-            math = math.Replace("`", "");
-            DataTable dataTable = new DataTable();
-            var result = dataTable.Compute(math, null);
-            await ReplyAsync($"Result is {result}");
         }
     }
 

@@ -27,13 +27,13 @@ namespace DiscordBot
             string url = post["url"].ToString();
             if (url.EndsWith(".gifv")) url = url.Remove(url.Length - 1);
 
-            var builder = new EmbedBuilder()
+            EmbedBuilder builder = new EmbedBuilder()
                 .WithImageUrl(url)
                 .WithColor(new Color(33, 176, 252))
                 .WithTitle(post["title"].ToString())
                 .WithUrl($"https://reddit.com{post["permalink"]}")
                 .WithFooter($"🗨{post["num_comments"]} ⬆️{post["ups"]}");
-            var embed = builder.Build();
+            Embed embed = builder.Build();
             await Context.Channel.SendMessageAsync(null, false, embed);
         }
     }
