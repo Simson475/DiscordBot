@@ -15,9 +15,6 @@ namespace DiscordBot
 
     public class Program
     {
-        //public static async Task Main(string[] args) => await Startup.RunAsync(args);
-
-
         static async Task Main()
         {
             IHostBuilder builder = new HostBuilder()
@@ -59,12 +56,7 @@ namespace DiscordBot
                 .UseConsoleLifetime();
 
             IHost host = builder.Build();
-            using (host)
-            {
-                await host.RunAsync();
-            }
+            await host.RunAsync();
         }
-
-
     }
 }

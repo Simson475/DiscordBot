@@ -24,17 +24,17 @@ namespace DiscordBot
 
             JArray array = JArray.Parse(result);
             JObject post = JObject.Parse(array[0]["data"]["children"][0]["data"].ToString());
+            string url = post["url"].ToString();
+            if (url.EndsWith(".gifv")) url = url.Remove(url.Length - 1);
 
             var builder = new EmbedBuilder()
-                .WithImageUrl(post["url"].ToString())
+                .WithImageUrl(url)
                 .WithColor(new Color(33, 176, 252))
                 .WithTitle(post["title"].ToString())
                 .WithUrl($"https://reddit.com{post["permalink"]}")
                 .WithFooter($"🗨{post["num_comments"]} ⬆️{post["ups"]}");
-
             var embed = builder.Build();
             await Context.Channel.SendMessageAsync(null, false, embed);
         }
     }
-
 }

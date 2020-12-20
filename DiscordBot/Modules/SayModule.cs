@@ -15,5 +15,4 @@ namespace DiscordBot
             await ReplyAsync(echo);
         }
     }
-
 }
