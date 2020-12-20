@@ -1,48 +1,70 @@
-﻿using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Discord;
+using Discord.Addons.Hosting;
+using Discord.Commands;
+using Discord.WebSocket;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace DiscordBot
 {
 
     public class Program
     {
-        public static async Task Main(string[] args) => await Startup.RunAsync(args);
-        //public static void Main() => new Program().MainAsync().GetAwaiter().GetResult();
+        //public static async Task Main(string[] args) => await Startup.RunAsync(args);
 
-        //    private DiscordSocketClient _client;
-        //    private CommandService _commands;
-        //    private CommandHandler _commandHandler;
 
-        //    public async Task MainAsync()
-        //    {
+        static async Task Main()
+        {
+            IHostBuilder builder = new HostBuilder()
+                .ConfigureAppConfiguration(x =>
+                {
+                    IConfigurationRoot configuration = new ConfigurationBuilder()
+                        .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddEnvironmentVariables()
+                        .Build();
 
-        //        _client = new DiscordSocketClient();
-        //        _commands = new CommandService();
+                    x.AddConfiguration(configuration);
+                })
+                .ConfigureLogging(x =>
+                {
+                    x.AddConsole();
+                    x.SetMinimumLevel(LogLevel.Debug); // Defines what kind of information should be logged (e.g. Debug, Information, Warning, Critical) adjust this to your liking
+                })
+                .ConfigureDiscordHost<DiscordSocketClient>((context, config) =>
+                {
+                    config.SocketConfig = new DiscordSocketConfig
+                    {
+                        LogLevel = LogSeverity.Verbose, // Defines what kind of information should be logged from the API (e.g. Verbose, Info, Warning, Critical) adjust this to your liking
+                        AlwaysDownloadUsers = true,
+                        MessageCacheSize = 200,
+                    };
 
-        //        _client.Log += Log;
-        //        _commandHandler = new CommandHandler(_client, _commands);
+                    config.Token = context.Configuration["token"];
+                })
+                .UseCommandService((context, config) =>
+                {
+                    config.CaseSensitiveCommands = false;
+                    config.LogLevel = LogSeverity.Verbose;
+                    config.DefaultRunMode = RunMode.Sync;
+                })
+                .ConfigureServices((context, services) =>
+                {
+                    services.AddHostedService<CommandHandler>();
+                })
+                .UseConsoleLifetime();
 
-        //        //discord token
-        //        string token = Environment.GetEnvironmentVariable("Token");
-        //        //string token = File.ReadAllText("./env.txt");
+            IHost host = builder.Build();
+            using (host)
+            {
+                await host.RunAsync();
+            }
+        }
 
-        //        await _commandHandler.InstallCommandsAsync();
-        //        await _client.LoginAsync(TokenType.Bot, token);
-        //        await _client.StartAsync();
 
-        //        // Block this task until the program is closed.
-        //        await Task.Delay(-1);
-        //    }
-
-        //    private Task Log(LogMessage msg)
-        //    {
-        //        Console.WriteLine(msg.ToString());
-        //        return Task.CompletedTask;
-        //    }
     }
 }

@@ -10,11 +10,9 @@ namespace DiscordBot
         // ~say hello world -> hello world
         [Command("Say")]
         [Summary("Echoes a message.")]
-        public Task SayCommand([Remainder][Summary("The text to echo")] string echo)
+        public async Task SayCommand([Remainder][Summary("The text to echo")] string echo)
         {
-            ReplyAsync(echo);
-            return Task.CompletedTask;
-
+            await ReplyAsync(echo);
         }
     }
 
