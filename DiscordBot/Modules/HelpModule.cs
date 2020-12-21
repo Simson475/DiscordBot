@@ -24,11 +24,9 @@ namespace DiscordBot
             {
                 // Get the command Summary attribute information
                 string group = command.Module.Group + " ";
-
                 string embedFieldText = command.Summary ?? "No description available\n";
                 embedBuilder.AddField($"{group} {command.Name}", embedFieldText);
             }
-
             await ReplyAsync("Here's a list of commands and their description: ", false, embedBuilder.Build());
         }
     }

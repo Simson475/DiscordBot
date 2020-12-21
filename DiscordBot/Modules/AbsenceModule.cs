@@ -1,0 +1,68 @@
+﻿using Discord.Commands;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using System;
+using System.Globalization;
+using System.Threading.Tasks;
+
+namespace DiscordBot
+{
+    //public class DBTestModule : ModuleBase<SocketCommandContext>
+    //{
+    //    [Command("DB")]
+    //    [Summary("Test Command")]
+    //    public async Task DBCommand()
+    //    {
+    //        string password = Environment.GetEnvironmentVariable("password");
+    //        MongoClient client = new MongoClient($"mongodb+srv://dbUser:{password}@botdb.soulu.mongodb.net/<dbname>?retryWrites=true&w=majority");
+    //        IMongoDatabase database = client.GetDatabase("DiscordBot");
+    //        IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>("Test");
+
+    //        FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("student_id", 10000);
+    //        BsonDocument test = collection.Find<BsonDocument>(filter).FirstOrDefault();
+    //        await Context.Channel.SendMessageAsync(test.ToString());
+    //    }
+    //}
+
+    public class AbsenceModule : ModuleBase<SocketCommandContext>
+    {
+        [Command("Absent")]
+        [Summary("Marks the user as absent for the given date. format is Absent dd/MM/yy reason")]
+        public async Task AbsentCommand([Remainder] string args)
+        {
+
+            string[] argumentsSplit = args.Split(" ");
+            DateTime date = DateTime.Parse(argumentsSplit[0], CultureInfo.CreateSpecificCulture("da-DK"));
+            string reason = argumentsSplit[1];
+
+            if (argumentsSplit.Length != 2)
+            {
+                await ReplyAsync("please supply both date and reason");
+                return;
+            }
+            if (date < DateTime.UtcNow)
+            {
+                await ReplyAsync("Cannot add absence to past dates");
+                return;
+            }
+
+            string password = Environment.GetEnvironmentVariable("password");
+            MongoClient client = new MongoClient($"mongodb+srv://dbUser:{password}@botdb.soulu.mongodb.net/<dbname>?retryWrites=true&w=majority");
+            IMongoDatabase database = client.GetDatabase("DiscordBot");
+            IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>("Absence");
+
+            BsonDocument entry = new BsonDocument()
+            {
+                {"server", Context.Guild.Id.ToString() },
+                {"username", Context.User.Username},
+                {"discriminator", Context.User.Discriminator },
+                {"date", date.ToString("dd/MM/yy") },
+                {"reason", reason }
+            };
+            collection.InsertOne(entry);
+
+            await Context.Channel.SendMessageAsync("Absense added.");
+        }
+
+    }
+}
