@@ -2,7 +2,9 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DiscordBot
@@ -30,14 +32,13 @@ namespace DiscordBot
         [Summary("Marks the user as absent for the given date. format is Absent dd/MM/yy reason")]
         public async Task AbsentCommand([Remainder] string args)
         {
-
-            string[] argumentsSplit = args.Split(" ");
+            List<string> argumentsSplit = args.Split(" ").ToList();
             DateTime date = DateTime.Parse(argumentsSplit[0], CultureInfo.CreateSpecificCulture("da-DK"));
-            string reason = argumentsSplit[1];
 
-            if (argumentsSplit.Length != 2)
+
+            if (argumentsSplit.Count < 2)
             {
-                await ReplyAsync("please supply both date and reason");
+                await ReplyAsync("please supply both date and reason"+argumentsSplit.Count);
                 return;
             }
             if (date < DateTime.UtcNow)
@@ -46,6 +47,8 @@ namespace DiscordBot
                 return;
             }
 
+            argumentsSplit.RemoveAt(0);
+            string reason = String.Join(" ", argumentsSplit);
             string password = Environment.GetEnvironmentVariable("password");
             MongoClient client = new MongoClient($"mongodb+srv://dbUser:{password}@botdb.soulu.mongodb.net/<dbname>?retryWrites=true&w=majority");
             IMongoDatabase database = client.GetDatabase("DiscordBot");
