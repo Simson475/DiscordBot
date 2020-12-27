@@ -9,8 +9,8 @@ namespace DiscordBot
     public class MemeModule : ModuleBase<SocketCommandContext>
     {
         [Command("Meme")]
-        [Alias("Reddit")]
-        [Summary("Posts a meme to the channel")]
+        [Alias("Reddit", "R")]
+        [Summary("Posts a meme to the channel\nformat is reddit ChosenSubreddit\nAliases: R or Reddit")]
         public async Task MemeCommand(string subreddit = null)
         {
             HttpClient client = new HttpClient();

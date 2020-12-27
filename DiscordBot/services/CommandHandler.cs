@@ -67,14 +67,20 @@ namespace DiscordBot
         private void SetupAbsenceTimer()
         {
             DateTime now = DateTime.Now;
-            DateTime at8 = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 8, 0, 0);
-            if (now.Hour >= 8) at8 = at8.AddDays(1);
+            TimeZoneInfo TimeInDenmark = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+            DateTime DenmarkDateTime = TimeZoneInfo.ConvertTime(DateTime.Now, TimeInDenmark);
+            int HoursOffset = now.Hour - DenmarkDateTime.Hour;
+            int HoursOfDay = 8;
+            DateTime at8 = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, HoursOfDay + HoursOffset, 0, 0);
+            if (now.Hour >= HoursOfDay - HoursOffset) at8 = at8.AddDays(1);
+
             TimeSpan timeUntill8 = at8 - now;
             AbsenceTimer = new Timer(MessageAbsence, null, timeUntill8, new TimeSpan(1, 0, 0, 0));
         }
 
         private async void MessageAbsence(object state)
         {
+            Console.WriteLine("Running messageAbsence");
             string password = Environment.GetEnvironmentVariable("password");
             MongoClient client = new MongoClient($"mongodb+srv://dbUser:{password}@botdb.soulu.mongodb.net/<dbname>?retryWrites=true&w=majority");
             IMongoDatabase database = client.GetDatabase("DiscordBot");
