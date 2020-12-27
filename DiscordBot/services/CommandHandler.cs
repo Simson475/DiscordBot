@@ -11,6 +11,7 @@ using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using TimeZoneConverter;
 
 namespace DiscordBot
 {
@@ -67,7 +68,7 @@ namespace DiscordBot
         private void SetupAbsenceTimer()
         {
             DateTime now = DateTime.Now;
-            TimeZoneInfo TimeInDenmark = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+            TimeZoneInfo TimeInDenmark = TZConvert.GetTimeZoneInfo("Central European Standard Time");
             DateTime DenmarkDateTime = TimeZoneInfo.ConvertTime(DateTime.Now, TimeInDenmark);
             int HoursOffset = now.Hour - DenmarkDateTime.Hour;
             int HoursOfDay = 8;
