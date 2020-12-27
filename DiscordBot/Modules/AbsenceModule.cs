@@ -38,7 +38,7 @@ namespace DiscordBot
 
             if (argumentsSplit.Count < 2)
             {
-                await ReplyAsync("please supply both date and reason"+argumentsSplit.Count);
+                await ReplyAsync("please supply both date and reason" + argumentsSplit.Count);
                 return;
             }
             if (date < DateTime.UtcNow)
