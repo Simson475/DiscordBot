@@ -81,6 +81,7 @@ namespace DiscordBot
 
         private async void MessageAbsence(object state)
         {
+
             Console.WriteLine("Running messageAbsence");
             string password = Environment.GetEnvironmentVariable("password");
             MongoClient client = new MongoClient($"mongodb+srv://dbUser:{password}@botdb.soulu.mongodb.net/<dbname>?retryWrites=true&w=majority");
