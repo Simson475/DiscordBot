@@ -14,5 +14,4 @@ namespace DiscordBot
             await ReplyAsync($"{Context.User.Mention} Pong! The latency is {Context.Client.Latency}ms");
         }
     }
-
 }
