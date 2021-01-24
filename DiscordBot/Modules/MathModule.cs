@@ -16,6 +16,4 @@ namespace DiscordBot
             await ReplyAsync($"Result is {result}");
         }
     }
-
-
 }

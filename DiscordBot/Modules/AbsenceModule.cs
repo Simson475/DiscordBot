@@ -46,9 +46,7 @@ namespace DiscordBot
                 {"reason", reason }
             };
             collection.InsertOne(entry);
-
             await Context.Channel.SendMessageAsync("Absense added.");
         }
-
     }
 }
