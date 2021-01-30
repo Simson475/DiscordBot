@@ -17,7 +17,7 @@ namespace DiscordBot
         {
 
             string[] numbers = new string[] { ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:" };
-            var emojis = new Emoji[] { new Emoji("1️⃣"), new Emoji("2️⃣"), new Emoji("3️⃣"), new Emoji("4️⃣"), new Emoji("5️⃣"), new Emoji("6️⃣"), new Emoji("7️⃣"), new Emoji("8️⃣"), new Emoji("9️⃣"), new Emoji("") };
+            var emojis = new Emoji[] { new Emoji("1️⃣"), new Emoji("2️⃣"), new Emoji("3️⃣"), new Emoji("4️⃣"), new Emoji("5️⃣"), new Emoji("6️⃣"), new Emoji("7️⃣"), new Emoji("8️⃣"), new Emoji("9️⃣") };
 
 
 
@@ -42,6 +42,7 @@ namespace DiscordBot
             {
                 builder.AddField(numbers[i], choices[i]);
             }
+            builder.AddField(":track_next:", "I dont care");
 
             Embed embed = builder.Build();
             RestUserMessage message = await Context.Channel.SendMessageAsync(null, false, embed);
@@ -50,6 +51,8 @@ namespace DiscordBot
             {
                 await message.AddReactionAsync(emojis[i]);
             }
+            await message.AddReactionAsync(new Emoji("⏩"));
+
         }
     }
 }
