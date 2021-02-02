@@ -47,7 +47,7 @@ namespace DiscordBot
                 {
                     config.CaseSensitiveCommands = false;
                     config.LogLevel = LogSeverity.Verbose;
-                    config.DefaultRunMode = RunMode.Sync;
+                    config.DefaultRunMode = RunMode.Async;
                 })
                 .ConfigureServices((context, services) =>
                 {
