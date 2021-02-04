@@ -15,7 +15,7 @@ namespace DiscordBot
 
         [Command("Reminder")]
         [Alias("R")]
-        [Summary("Sets a reminder. Format is Reminder 12:34 <remindermessage>")]
+        [Summary("Sets a reminder. Format is Reminder <optional dd/MM/yy> <hh:MM> <remindermessage>")]
         public async Task ReminderCommand([Remainder] string args)
         {
             //cursed solution
@@ -30,7 +30,7 @@ namespace DiscordBot
 
             if (DateTime.TryParse(input[1], out time))
             {
-                time = DateTime.Parse(input[0] +" "+ input[1], dk);
+                time = DateTime.Parse(input[0] + " " + input[1], dk);
                 input.RemoveRange(0, 2);
 
             }
@@ -41,7 +41,6 @@ namespace DiscordBot
 
             }
             args = string.Join(" ", input.ToArray());
-
 
 
             TimeZoneInfo TimeInDenmark = TZConvert.GetTimeZoneInfo("Central European Standard Time");
