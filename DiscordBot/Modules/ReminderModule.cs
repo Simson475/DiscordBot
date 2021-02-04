@@ -1,6 +1,8 @@
 ﻿using Discord.Commands;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TimeZoneConverter;
@@ -13,10 +15,35 @@ namespace DiscordBot
 
         [Command("Reminder")]
         [Alias("R")]
-        [Summary("Sets a reminder. Format is Reminder 12:34 <remindermessage>\n" +
-                 "can only be used on the same day")]
-        public async Task ReminderCommand(DateTime time, [Remainder] string args)
+        [Summary("Sets a reminder. Format is Reminder 12:34 <remindermessage>")]
+        public async Task ReminderCommand([Remainder] string args)
         {
+            //cursed solution
+            var input = args.Split(" ").ToList();
+            CultureInfo dk = new CultureInfo("da-DK");
+
+            if (!DateTime.TryParse(input[0], out DateTime time))
+            {
+                await ReplyAsync($"Invalid format for reminders");
+                return;
+            }
+
+            if (DateTime.TryParse(input[1], out time))
+            {
+                time = DateTime.Parse(input[0] +" "+ input[1], dk);
+                input.RemoveRange(0, 2);
+
+            }
+            else
+            {
+                time = DateTime.Parse(input[0], dk);
+                input.RemoveRange(0, 1);
+
+            }
+            args = string.Join(" ", input.ToArray());
+
+
+
             TimeZoneInfo TimeInDenmark = TZConvert.GetTimeZoneInfo("Central European Standard Time");
             DateTime DenmarkDateTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeInDenmark);
             DateTime Now = DateTime.UtcNow.AddHours(DenmarkDateTime.Hour - DateTime.UtcNow.Hour);
@@ -26,6 +53,7 @@ namespace DiscordBot
                 return;
             }
             TimeSpan delay = time - Now;
+            Console.WriteLine($"{delay.Days}, {delay.Hours}, {delay.Minutes}, {delay.Seconds}");
             WrapperClass wrapper = new WrapperClass(Context, args);
             Timer ReminderTimer = new Timer(ReminderMessage, wrapper, (int)delay.TotalMilliseconds, Timeout.Infinite);
             wrapper.InternalTimer = ReminderTimer;
@@ -35,7 +63,6 @@ namespace DiscordBot
 
         private async void ReminderMessage(object state)
         {
-            Console.WriteLine("ReminderMessage triggered");
             WrapperClass wrapper = state as WrapperClass;
             await wrapper.Context.Channel.SendMessageAsync($"@everyone {wrapper.Message}");
             wrapper.InternalTimer.Dispose();
