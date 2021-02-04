@@ -9,7 +9,7 @@ namespace DiscordBot
 {
     public class ReminderModule : ModuleBase<SocketCommandContext>
     {
-        static List<Timer> Reminders = new List<Timer>();
+        static readonly List<Timer> Reminders = new List<Timer>();
 
         [Command("Reminder")]
         [Alias("R")]
@@ -27,7 +27,7 @@ namespace DiscordBot
             }
             TimeSpan delay = time - Now;
             Timer ReminderTimer = new Timer(ReminderMessage, new WrapperClass(Context, args), (int)delay.TotalMilliseconds, Timeout.Infinite);
-            //Reminders.Add(ReminderTimer);
+            Reminders.Add(ReminderTimer);
             _ = await Context.Channel.SendMessageAsync($"Reminder set at {time:HH:mm}");
         }
 
