@@ -25,7 +25,7 @@ namespace DiscordBot
             }
             TimeSpan delay = time - Now;
             Timer ReminderTimer = new Timer(ReminderMessage, new WrapperClass(Context, args), (int)delay.TotalMilliseconds, Timeout.Infinite);
-            await Context.Channel.SendMessageAsync($"Reminder set at {time:HH:mm} time now is {Now:HH:mm}");
+            _ = await Context.Channel.SendMessageAsync($"Reminder set at {time:HH:mm} time now is {Now:HH:mm} it will go off in {delay}");
         }
 
         private async void ReminderMessage(object state)
