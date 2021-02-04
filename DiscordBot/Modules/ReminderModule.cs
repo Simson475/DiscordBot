@@ -9,11 +9,11 @@ namespace DiscordBot
 {
     public class ReminderModule : ModuleBase<SocketCommandContext>
     {
-        static readonly List<Timer> Reminders = new List<Timer>();
+        static readonly List<WrapperClass> Reminders = new List<WrapperClass>();
 
         [Command("Reminder")]
         [Alias("R")]
-        [Summary("Sets a reminder. Format is Reminder 12:34 remindermessage\n" +
+        [Summary("Sets a reminder. Format is Reminder 12:34 <remindermessage>\n" +
                  "can only be used on the same day")]
         public async Task ReminderCommand(DateTime time, [Remainder] string args)
         {
@@ -26,8 +26,10 @@ namespace DiscordBot
                 return;
             }
             TimeSpan delay = time - Now;
-            Timer ReminderTimer = new Timer(ReminderMessage, new WrapperClass(Context, args), (int)delay.TotalMilliseconds, Timeout.Infinite);
-            Reminders.Add(ReminderTimer);
+            WrapperClass wrapper = new WrapperClass(Context, args);
+            Timer ReminderTimer = new Timer(ReminderMessage, wrapper, (int)delay.TotalMilliseconds, Timeout.Infinite);
+            wrapper.InternalTimer = ReminderTimer;
+            Reminders.Add(wrapper);
             _ = await Context.Channel.SendMessageAsync($"Reminder set at {time:HH:mm}");
         }
 
@@ -35,9 +37,9 @@ namespace DiscordBot
         {
             Console.WriteLine("ReminderMessage triggered");
             WrapperClass wrapper = state as WrapperClass;
-            Console.WriteLine($"wrapper read {wrapper.Context.Message}");
             await wrapper.Context.Channel.SendMessageAsync($"@everyone {wrapper.Message}");
-
+            wrapper.InternalTimer.Dispose();
+            Reminders.Remove(wrapper);
         }
 
         class WrapperClass
@@ -47,6 +49,7 @@ namespace DiscordBot
                 Context = context;
                 Message = message;
             }
+            public Timer InternalTimer { get; set; }
             public SocketCommandContext Context { get; set; }
             public string Message { get; set; }
         }
