@@ -30,7 +30,7 @@ namespace DiscordBot
                 return;
             }
 
-            argumentsSplit.RemoveAt(0);
+            argumentsSplit.RemoveAt(0); //Remove date from list (is stored in date)
             string reason = String.Join(" ", argumentsSplit);
             string password = Environment.GetEnvironmentVariable("password");
             MongoClient client = new MongoClient($"mongodb+srv://dbUser:{password}@botdb.soulu.mongodb.net/<dbname>?retryWrites=true&w=majority");

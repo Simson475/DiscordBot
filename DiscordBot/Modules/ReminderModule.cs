@@ -28,6 +28,7 @@ namespace DiscordBot
                 return;
             }
 
+            //checks if optional parameter is filled
             if (DateTime.TryParse(input[1], out time))
             {
                 time = DateTime.Parse(input[0] + " " + input[1], dk);
@@ -42,7 +43,7 @@ namespace DiscordBot
             }
             args = string.Join(" ", input.ToArray());
 
-
+            //calculate time till reminder in denmark (relevant since hosting server is not in our time zone)
             TimeZoneInfo TimeInDenmark = TZConvert.GetTimeZoneInfo("Central European Standard Time");
             DateTime DenmarkDateTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeInDenmark);
             DateTime Now = DateTime.UtcNow.AddHours(DenmarkDateTime.Hour - DateTime.UtcNow.Hour);
@@ -51,10 +52,12 @@ namespace DiscordBot
                 await ReplyAsync($"Cannot schedule reminders in the past");
                 return;
             }
+
             TimeSpan delay = time - Now;
-            Console.WriteLine($"{delay.Days}, {delay.Hours}, {delay.Minutes}, {delay.Seconds}");
-            WrapperClass wrapper = new WrapperClass(Context, args);
+            WrapperClass wrapper = new WrapperClass(Context, args); // TODO Should test if this can be done with tuple instead
             Timer ReminderTimer = new Timer(ReminderMessage, wrapper, (int)delay.TotalMilliseconds, Timeout.Infinite);
+
+            //Needed so timer is not garbage collected before it triggers
             wrapper.InternalTimer = ReminderTimer;
             Reminders.Add(wrapper);
             _ = await Context.Channel.SendMessageAsync($"Reminder set at {time:HH:mm}");
@@ -64,6 +67,8 @@ namespace DiscordBot
         {
             WrapperClass wrapper = state as WrapperClass;
             await wrapper.Context.Channel.SendMessageAsync($"@everyone {wrapper.Message}");
+
+            //Makes it available to garbage collection (circular reference)
             wrapper.InternalTimer.Dispose();
             Reminders.Remove(wrapper);
         }

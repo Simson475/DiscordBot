@@ -51,9 +51,13 @@ namespace DiscordBot
         {
             int argPos = 0;
 
+            // Should only trigger message created by user if not, return.
             if (!(arg is SocketUserMessage message)) return;
+            // Makes sure a bot edit on a user message does not trigger bot.
             if (message.Source != MessageSource.User) return;
-            if (!message.HasStringPrefix(_config["prefix"], ref argPos) && !message.HasMentionPrefix(_client.CurrentUser, ref argPos)) return;
+            //Bot only triggers if tagged or prefix is correct.
+            if (!message.HasStringPrefix(_config["prefix"], ref argPos) &&
+                !message.HasMentionPrefix(_client.CurrentUser, ref argPos)) return;
 
             SocketCommandContext context = new SocketCommandContext(_client, message);
             await _service.ExecuteAsync(context, argPos, _provider);
@@ -100,11 +104,11 @@ namespace DiscordBot
                 foreach (BsonDocument element in group)
                 {
                     string username = element["username"].ToString();
-                    var discriminator = element["discriminator"].ToString();
+                    string discriminator = element["discriminator"].ToString();
                     string reason = element["reason"].ToString();
                     //SocketUser actualUser = _client.GetUser(username, discriminator);
 
-                    absentees += $"{username}: {reason}\n";
+                    absentees += $"@{username}: {reason}\n";
                 }
                 await _client.GetGuild(guild).DefaultChannel.SendMessageAsync(absentees);
             }

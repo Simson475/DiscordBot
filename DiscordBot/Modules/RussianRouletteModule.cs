@@ -17,6 +17,7 @@ namespace DiscordBot
         public async Task StartCommand([Remainder] string arg)
         {
             string[] args = arg.Split(" ");
+            //consider making clearer error messages
             if (!int.TryParse(args[0], out int shots) ||
                 !int.TryParse(args[1], out int armed) ||
                 shots <= armed ||
@@ -67,6 +68,7 @@ namespace DiscordBot
                     game.ShotUsers.Add(Context.User);
                     message += $"{Context.User.Mention} was shot!\n";
                 }
+                // consider if it should only end if armed == 0
                 if (game.Armed == 0 ||
                     game.Shots == 0 ||
                     game.Armed >= game.Shots)

@@ -33,6 +33,7 @@ namespace DiscordBot
             EmbedBuilder builder = new EmbedBuilder()
                 .WithColor(new Color(33, 176, 252))
                 .WithTitle(title);
+            //Limit imposed because no more number emotes are available
             if (numbers.Length < choices.Count)
             {
                 await Context.Channel.SendMessageAsync("Too many options. please limit yourself to 9");
