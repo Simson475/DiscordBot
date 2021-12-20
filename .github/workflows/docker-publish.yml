@@ -17,6 +17,7 @@ env:
   REGISTRY: ghcr.io #GitHub Continuous Registry
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
+  DOCKER_TARGET_PLATFORM: linux/arm/v7
 
 
 jobs:
