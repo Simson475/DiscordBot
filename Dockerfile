@@ -7,6 +7,6 @@ RUN dotnet restore
 COPY . ./
 RUN dotnet publish -c Release -o out -r linux-arm
 
-FROM mcr.microsoft.com/dotnet/aspnet:latest
+FROM --platform linux/arm/v7 mcr.microsoft.com/dotnet/aspnet:latest
 WORKDIR /app
 COPY --from=build-env /app/out .
