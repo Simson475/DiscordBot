@@ -5,7 +5,7 @@ COPY ./DiscordBot/*.csproj ./
 COPY ./DiscordBot/NuGet.Config ./
 RUN dotnet restore
 COPY . ./
-RUN dotnet publish -c Release -o out -r linux-arm
+RUN dotnet publish -c Release -o out
 
 FROM mcr.microsoft.com/dotnet/aspnet:latest
 WORKDIR /app
