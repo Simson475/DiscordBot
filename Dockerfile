@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:latest AS build-env
+FROM --platform=linux/arm/v7 mcr.microsoft.com/dotnet/sdk:latest AS build-env
 WORKDIR /app
 
 COPY ./DiscordBot/*.csproj ./
