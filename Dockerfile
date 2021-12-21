@@ -10,3 +10,5 @@ RUN dotnet publish -c Release -o out -r linux-arm
 FROM mcr.microsoft.com/dotnet/aspnet:latest
 WORKDIR /app
 COPY --from=build-env /app/out .
+
+ENTRYPOINT ["dotnet", "DiscordBot.dll"]
