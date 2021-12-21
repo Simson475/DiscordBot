@@ -78,7 +78,11 @@ namespace DiscordBot
             int HoursOfDay = 8;
             DateTime at8 = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, HoursOfDay + HoursOffset, 0, 0);
             if (now.Hour >= HoursOfDay - HoursOffset) at8 = at8.AddDays(1);
-
+            Console.WriteLine("now.hour: " + now.Hour +
+                              "\nhoursofday: " + HoursOfDay +
+                              "\nhoursoffset: " + HoursOffset +
+                              "\nat 8: " + at8 +
+                              "\nnow:" + now);
             TimeSpan timeUntill8 = at8 - now;
             Console.WriteLine("time untill 8 in denmark " + timeUntill8);
             AbsenceTimer = new Timer(MessageAbsence, null, timeUntill8, new TimeSpan(1, 0, 0, 0));
