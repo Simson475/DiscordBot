@@ -13,7 +13,7 @@ namespace DiscordBot
         [Summary("Posts a meme to the channel\nformat is reddit ChosenSubreddit\nAliases: R or Reddit")]
         public async Task MemeCommand(string subreddit = null)
         {
-            HttpClient client = new HttpClient();
+            HttpClient client = new();
             string result = await client.GetStringAsync($"https://reddit.com/r/{subreddit ?? "memes"}/random.json?limit=1");
 
             if (!result.StartsWith("["))

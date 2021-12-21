@@ -15,13 +15,13 @@ namespace DiscordBot
         public async Task HelpCommand()
         {
             //Creates new commandservices which can gain information about all modules.
-            CommandService _commands = new CommandService();
+            CommandService _commands = new();
             await _commands.AddModulesAsync(assembly: Assembly.GetEntryAssembly(),
                                             services: null);
             List<CommandInfo> commands = _commands.Commands.ToList();
 
             //Builds an embedded list with all commands and their summary
-            EmbedBuilder embedBuilder = new EmbedBuilder();
+            EmbedBuilder embedBuilder = new();
             foreach (CommandInfo command in commands)
             {
                 // Get the command Summary attribute information

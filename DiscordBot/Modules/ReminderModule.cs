@@ -11,7 +11,7 @@ namespace DiscordBot
 {
     public class ReminderModule : ModuleBase<SocketCommandContext>
     {
-        static readonly List<WrapperClass> Reminders = new List<WrapperClass>();
+        static readonly List<WrapperClass> Reminders = new();
 
         [Command("Reminder")]
         [Alias("R")]
@@ -20,7 +20,7 @@ namespace DiscordBot
         {
             //cursed solution
             var input = args.Split(" ").ToList();
-            CultureInfo dk = new CultureInfo("da-DK");
+            CultureInfo dk = new("da-DK");
 
             if (!DateTime.TryParse(input[0], out DateTime time))
             {
@@ -54,8 +54,8 @@ namespace DiscordBot
             }
 
             TimeSpan delay = time - Now;
-            WrapperClass wrapper = new WrapperClass(Context, args); // TODO Should test if this can be done with tuple instead
-            Timer ReminderTimer = new Timer(ReminderMessage, wrapper, (int)delay.TotalMilliseconds, Timeout.Infinite);
+            WrapperClass wrapper = new(Context, args); // TODO Should test if this can be done with tuple instead
+            Timer ReminderTimer = new(ReminderMessage, wrapper, (int)delay.TotalMilliseconds, Timeout.Infinite);
 
             //Needed so timer is not garbage collected before it triggers
             wrapper.InternalTimer = ReminderTimer;

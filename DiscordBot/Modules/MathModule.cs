@@ -11,7 +11,7 @@ namespace DiscordBot
         public async Task MathCommand([Remainder] string math)
         {
             math = math.Replace("`", "");
-            DataTable dataTable = new DataTable();
+            DataTable dataTable = new();
             object result = dataTable.Compute(math, null);
             await ReplyAsync($"Result is {result}");
         }

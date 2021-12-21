@@ -57,7 +57,7 @@ namespace DiscordBot
             else if (game.ShotUsers.Find(x => x == Context.User) != null) message += $"{Context.User.Mention} is already dead.";
             else
             {
-                Random random = new Random();
+                Random random = new();
                 int shotFired = random.Next(1, game.Shots);
                 game.Shots--;
 
