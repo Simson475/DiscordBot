@@ -76,10 +76,11 @@ namespace DiscordBot
             DateTime DenmarkDateTime = TimeZoneInfo.ConvertTime(DateTime.Now, TimeInDenmark);
             int HoursOffset = now.Hour - DenmarkDateTime.Hour;
             int HoursOfDay = 8;
-            DateTime at8 = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, HoursOfDay + HoursOffset, 0, 0);
+            DateTime at8 = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, HoursOfDay + HoursOffset, 0, 0);
             if (now.Hour >= HoursOfDay - HoursOffset) at8 = at8.AddDays(1);
 
             TimeSpan timeUntill8 = at8 - now;
+            Console.WriteLine("time untill 8 in denmark " + timeUntill8);
             AbsenceTimer = new Timer(MessageAbsence, null, timeUntill8, new TimeSpan(1, 0, 0, 0));
         }
 
