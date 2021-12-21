@@ -33,17 +33,17 @@ namespace DiscordBot
             argumentsSplit.RemoveAt(0); //Remove date from list (is stored in date)
             string reason = String.Join(" ", argumentsSplit);
             string password = Environment.GetEnvironmentVariable("password");
-            MongoClient client = new MongoClient($"mongodb+srv://dbUser:{password}@botdb.soulu.mongodb.net/<dbname>?retryWrites=true&w=majority");
+            MongoClient client = new($"mongodb+srv://dbUser:{password}@botdb.soulu.mongodb.net/<dbname>?retryWrites=true&w=majority");
             IMongoDatabase database = client.GetDatabase("DiscordBot");
             IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>("Absence");
 
-            BsonDocument entry = new BsonDocument()
+            BsonDocument entry = new()
             {
-                {"server", Context.Guild.Id.ToString() },
-                {"username", Context.User.Username},
-                {"discriminator", Context.User.Discriminator },
-                {"date", date.ToString("dd/MM/yy") },
-                {"reason", reason }
+                { "server", Context.Guild.Id.ToString() },
+                { "username", Context.User.Username },
+                { "discriminator", Context.User.Discriminator },
+                { "date", date.ToString("dd/MM/yy") },
+                { "reason", reason }
             };
             collection.InsertOne(entry);
             await Context.Channel.SendMessageAsync("Absense added.");

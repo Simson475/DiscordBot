@@ -52,14 +52,14 @@ namespace DiscordBot
             int argPos = 0;
 
             // Should only trigger message created by user if not, return.
-            if (!(arg is SocketUserMessage message)) return;
+            if (arg is not SocketUserMessage message) return;
             // Makes sure a bot edit on a user message does not trigger bot.
             if (message.Source != MessageSource.User) return;
             //Bot only triggers if tagged or prefix is correct.
             if (!message.HasStringPrefix(_config["prefix"], ref argPos) &&
                 !message.HasMentionPrefix(_client.CurrentUser, ref argPos)) return;
 
-            SocketCommandContext context = new SocketCommandContext(_client, message);
+            SocketCommandContext context = new(_client, message);
             await _service.ExecuteAsync(context, argPos, _provider);
         }
 
@@ -88,7 +88,7 @@ namespace DiscordBot
 
             Console.WriteLine("Running messageAbsence");
             string password = Environment.GetEnvironmentVariable("password");
-            MongoClient client = new MongoClient($"mongodb+srv://dbUser:{password}@botdb.soulu.mongodb.net/<dbname>?retryWrites=true&w=majority");
+            MongoClient client = new($"mongodb+srv://dbUser:{password}@botdb.soulu.mongodb.net/<dbname>?retryWrites=true&w=majority");
             IMongoDatabase database = client.GetDatabase("DiscordBot");
             IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>("Absence");
 
