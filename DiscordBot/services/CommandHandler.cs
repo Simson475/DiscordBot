@@ -77,7 +77,7 @@ namespace DiscordBot
             int HoursOffset = now.Hour - DenmarkDateTime.Hour;
             int HoursOfDay = 8;
             DateTime at8 = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, HoursOfDay + HoursOffset, 0, 0);
-            if (now.Hour >= HoursOfDay - HoursOffset) at8 = at8.AddDays(1);
+            if (now.Hour >= HoursOfDay + HoursOffset) at8 = at8.AddDays(1);
             Console.WriteLine("now.hour: " + now.Hour +
                               "\nhoursofday: " + HoursOfDay +
                               "\nhoursoffset: " + HoursOffset +
